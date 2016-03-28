@@ -3,8 +3,8 @@
 	## -------------------------------------------------------
 	#  Klasemate
 	## -------------------------------------------------------
-	#  Created by Brunno Pleffken Hosti
-	#  http://klasemate.arcestia.id
+	#  Created by Laurensius Jeffrey Chandra
+	#  http://github.com/arcestiaishere/klasemate
 	#
 	#  File: index.php
 	#  License: GPLv2
@@ -92,8 +92,8 @@
 			$template = <<<HTML
 				<div class="step-box">
 					<div class="current"><h3>Step 1</h3><span class="tiny">EULA</span></div>
-					<div class="next"><h3>Step 2</h3><span class="tiny">Requirements</span></div>
-					<div class="next"><h3>Step 3</h3><span class="tiny">Database Settings</span></div>
+					<div class="next"><h3>Step 2</h3><span class="tiny">Database Settings</span></div>
+					<div class="next"><h3>Step 3</h3><span class="tiny">Requirements</span></div>
 					<div class="next"><h3>Step 4</h3><span class="tiny">Community Settings</span></div>
 					<div class="next"><h3>Step 5</h3><span class="tiny">Install</span></div>
 				</div>
@@ -117,11 +117,11 @@ HTML;
 
 		/**
 		 * --------------------------------------------------------------------
-		 * STEP 3
+		 * STEP 2
 		 * --------------------------------------------------------------------
 		 */
 
-		case 3:
+		case 2:
 
 			// Second barrier to stop any unwanted reinstall
 
@@ -142,15 +142,15 @@ HTML;
 			$template = <<<HTML
 				<div class="step-box">
 					<div class="previous"><h3>Step 1</h3><span class="tiny">EULA</span></div>
-					<div class="previous"><h3>Step 2</h3><span class="tiny">Requirements</span></div>
-					<div class="current"><h3>Step 3</h3><span class="tiny">Database Settings</span></div>
+					<div class="current"><h3>Step 2</h3><span class="tiny">Database Settings</span></div>
+					<div class="next"><h3>Step 3</h3><span class="tiny">Requirements</span></div>
 					<div class="next"><h3>Step 4</h3><span class="tiny">Community Settings</span></div>
 					<div class="next"><h3>Step 5</h3><span class="tiny">Install</span></div>
 				</div>
 
 				{$notification}
 
-				<form action="index.php?step=4" method="post" id="database-form">
+				<form action="index.php?step=3" method="post" id="database-form">
 					<div class="input-box">
 						<div class="label">MySQL Host</div>
 						<div class="field"><input type="text" name="host" class="required small"></div>
@@ -179,21 +179,29 @@ HTML;
 
 		/**
 		 * --------------------------------------------------------------------
-		 * STEP 2
+		 * STEP 3
 		 * --------------------------------------------------------------------
 		 */
 
-		case 2:
+		case 3:
 
-			// Check system environment
+			session_start();
 
 			// Connect to database and get information
 			$installer = new Installer();
+
+			$_SESSION['db_server']   = $installer->input['db_server']   = $_REQUEST['host'];
+			$_SESSION['db_database'] = $installer->input['db_database'] = $_REQUEST['database'];
+			$_SESSION['db_username'] = $installer->input['db_username'] = $_REQUEST['username'];
+			$_SESSION['db_password'] = $installer->input['db_password'] = $_REQUEST['password'];
+			$_SESSION['db_port']     = $installer->input['db_port']     = $_REQUEST['port'];
 
 			$installer->InstallerDB();
 
 			$installer->Query("SELECT VERSION() AS mysql_version;");
 			$result = $installer->Fetch();
+
+			// Check system environment
 
 			preg_match("#[0-9]+\.[0-9]+\.[0-9]+#", $result['mysql_version'], $mysql_version);
 
@@ -318,8 +326,8 @@ HTML;
 			$template = <<<HTML
 				<div class="step-box">
 					<div class="previous"><h3>Step 1</h3><span class="tiny">EULA</span></div>
-					<div class="current"><h3>Step 2</h3><span class="tiny">Requirements</span></div>
-					<div class="next"><h3>Step 3</h3><span class="tiny">Database Settings</span></div>
+					<div class="previous"><h3>Step 2</h3><span class="tiny">Database Settings</span></div>
+					<div class="current"><h3>Step 3</h3><span class="tiny">Requirements</span></div>
 					<div class="next"><h3>Step 4</h3><span class="tiny">Community Settings</span></div>
 					<div class="next"><h3>Step 5</h3><span class="tiny">Install</span></div>
 				</div>
@@ -344,7 +352,7 @@ HTML;
 						{$folders}
 					</div>
 					<div class="input-box" style="text-align: center">
-						<input type="button" value="Proceed" onclick="javascript:window.location.replace('index.php?step=3')" {$disabled}>
+						<input type="button" value="Proceed" onclick="javascript:window.location.replace('index.php?step=4')" {$disabled}>
 					</div>
 				</form>
 HTML;
@@ -359,15 +367,7 @@ HTML;
 
 		case 4:
 
-		session_start();
-
-			// Connect to database and get information
-
-			$_SESSION['db_server']   = $installer->input['db_server']   = $_REQUEST['host'];
-			$_SESSION['db_database'] = $installer->input['db_database'] = $_REQUEST['database'];
-			$_SESSION['db_username'] = $installer->input['db_username'] = $_REQUEST['username'];
-			$_SESSION['db_password'] = $installer->input['db_password'] = $_REQUEST['password'];
-			$_SESSION['db_port']     = $installer->input['db_port']     = $_REQUEST['port'];
+			session_start();
 
 			$dir = str_replace("install", "", getcwd());
 			$url = str_replace("install/index.php", "", $_SERVER['HTTP_REFERER']);
@@ -433,8 +433,8 @@ HTML;
 			$template = <<<HTML
 				<div class="step-box">
 					<div class="previous"><h3>Step 1</h3><span class="tiny">EULA</span></div>
-					<div class="previous"><h3>Step 2</h3><span class="tiny">Requirements</span></div>
-					<div class="previous"><h3>Step 3</h3><span class="tiny">Database Settings</span></div>
+					<div class="previous"><h3>Step 2</h3><span class="tiny">Database Settings</span></div>
+					<div class="previous"><h3>Step 3</h3><span class="tiny">Requirements</span></div>
 					<div class="current"><h3>Step 4</h3><span class="tiny">Community Settings</span></div>
 					<div class="next"><h3>Step 5</h3><span class="tiny">Install</span></div>
 				</div>
@@ -528,8 +528,8 @@ HTML;
 
 				<div class="step-box">
 					<div class="previous"><h3>Step 1</h3><span class="tiny">EULA</span></div>
-					<div class="previous"><h3>Step 2</h3><span class="tiny">Requirements</span></div>
-					<div class="previous"><h3>Step 3</h3><span class="tiny">Database Settings</span></div>
+					<div class="previous"><h3>Step 2</h3><span class="tiny">Database Settings</span></div>
+					<div class="previous"><h3>Step 3</h3><span class="tiny">Requirements</span></div>
 					<div class="previous"><h3>Step 4</h3><span class="tiny">Community Settings</span></div>
 					<div class="current"><h3>Step 5</h3><span class="tiny">Install</span></div>
 				</div>
@@ -597,7 +597,7 @@ HTML;
 <body>
 	<div id="topbar">
 		<div class="wrapper">
-			<div class="fleft"><a href="http://klasemate.arcestia.id" target="_blank" class="transition">View Klasemate on GitHub</a></div>
+			<div class="fleft"><a href="https://github.com/arcestiaishere/klasemate" target="_blank" class="transition">View Klasemate on GitHub</a></div>
 			<div class="fix"></div>
 		</div>
 	</div>
