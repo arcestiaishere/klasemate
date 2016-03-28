@@ -1,0 +1,91 @@
+<div class="title-bar">
+	<div class="title fleft">
+		<span><?php __($community_name) ?></span>
+		<?php __("P_NEW_THREAD") ?>: <?php echo $room_info['name'] ?>
+	</div>
+</div>
+
+<div class="box">
+	<form action="thread/savethread/<?php echo $room_info['r_id'] ?>" method="post" class="validate" enctype="multipart/form-data">
+		<div class="input-box">
+			<div class="label"><?php __("P_THREAD_TITLE") ?></div>
+			<div class="field"><input type="text" name="title" class="large required" maxlength="250"></div>
+		</div>
+		<div class="input-box">
+			<div class="label"><?php __("P_POST") ?></div>
+			<div class="field">
+				<textarea name="post" id="post" class="full" rows="12"></textarea>
+			</div>
+		</div>
+		<?php if($is_poll): ?>
+			<div class="input-box">
+				<div class="label"><?php __("P_POLL_QUESTION") ?></div>
+				<div class="field">
+					<input type="text" name="poll_question" class="large required" maxlength="64"> &nbsp;
+					<input type="checkbox" name="poll_allow_multiple"> <?php __("P_POLL_ALLOW_MULTIPLE") ?>
+				</div>
+			</div>
+			<div class="input-box">
+				<div class="label">
+					<?php __("P_POLL_CHOICES") ?>
+					<span><?php __("P_POLL_CHOICES_DESC") ?></span>
+				</div>
+				<div class="field">
+					<textarea name="poll_choices" id="poll-choices" class="required large" rows="8"></textarea>
+				</div>
+			</div>
+		<?php endif; ?>
+		<?php if($allow_uploads): ?>
+			<div class="input-box">
+				<div class="label"><?php __("P_ATTACHMENTS") ?></div>
+				<div class="field"><input type="file" name="attachment"></div>
+			</div>
+		<?php endif; ?>
+		<?php if($member_info['usergroup'] == 1 || $member_info['usergroup'] == 2 || $is_moderator): ?>
+			<div class="input-box">
+				<div class="label"><?php __("P_OPTIONS") ?></div>
+				<div class="field text-only">
+					<label><input type="hidden" name="announcement" value="0"><input type="checkbox" value="1" name="announcement"> <?php __("P_SET_ANNOUNCEMENT") ?></label><br>
+					<label><input type="hidden" name="locked" value="0"><input type="checkbox" value="1" name="locked"> <?php __("P_LOCK") ?></label>
+					<a class="field-group-title" data-toggle="set-thread-date-box">
+						<i class="fa fa-fw fa-angle-down"></i> <?php __("T_AUTO_TITLE") ?>
+					</a>
+					<div class="field-group" id="set-thread-date-box">
+						<span>
+							<strong><?php __("T_AUTO_DESCRIPTION") ?></strong><br>
+							<small><?php echo $thread_auto_details ?></small>
+						</span>
+						<label>
+							<span><?php __("T_AUTO_OPEN_AT") ?></span>
+							<?php
+								__(Html::Days("open_day", 0, true) . "&nbsp;");
+								__(Html::Months("open_month", false, 0, true) . "&nbsp;");
+								__(Html::Years("open_year", 0, 2, 0, true) . " at ");
+								__(Html::Hours("open_hours", 0) . " : ");
+								__(Html::Minutes("open_minutes", 0));
+							?>
+						</label>
+						<br>
+						<label>
+							<span><?php __("T_AUTO_CLOSE_AT") ?></span>
+							<?php
+								__(Html::Days("lock_day", 0, true) . "&nbsp;");
+								__(Html::Months("lock_month", false, 0, true) . "&nbsp;");
+								__(Html::Years("lock_year", 0, 2, 0, true) . " at ");
+								__(Html::Hours("lock_hours", 0) . " : ");
+								__(Html::Minutes("lock_minutes", 0));
+							?>
+						</label>
+					</div>
+				</div>
+			</div>
+		<?php endif; ?>
+		<div class="fleft">
+			<div class="error-message"><?php __("P_NEW_ERROR") ?></div>
+		</div>
+		<div class="fright">
+			<input type="hidden" name="room_id" value="<?php echo $room_info['r_id'] ?>">
+			<input type="submit" value="<?php __("P_NEW_THREAD_SUBMIT") ?>">
+		</div>
+	</form>
+</div>
