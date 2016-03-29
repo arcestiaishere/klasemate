@@ -361,7 +361,7 @@ class Thread extends Application
 			"thread_id"   => $this->Db->GetLastID(),
 			"post_date"   => $thread['last_post_date'],
 			"ip_address"  => $_SERVER['REMOTE_ADDR'],
-			"post"        => str_replace("'", "&apos;", htmlspecialshars($_POST['post'])),
+			"post"        => str_replace("'", "&apos;", htmlspecialchars($_POST['post'])),
 			"best_answer" => 0,
 			"first_post"  => 1
 		);
