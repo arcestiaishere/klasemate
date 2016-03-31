@@ -24,7 +24,7 @@ As a contributor, you should **always** work on the `development` branch of your
 - Make your changes in a new Git branch: ```git checkout -b bug-fix-branch development```
 - Commit your changes using a descriptive commit message. Be clear and concise, since commits are used to help create changelogs.
 - Push your branch to GitHub: ```git push origin bug-fix-branch```
-- In GitHub interface, send a pull request to ```addictive-community:development```
+- In GitHub interface, send a pull request to ```klasemate:development```
 - If we suggest changes then:
   - Make and commit the required updates. Try to understand the reasons explained by the team for the denial. Above all, please don't be offended.
   - Rebase your branch and force push to your GitHub repository (this will update your Pull Request): ```git rebase development -i; git push origin bug-fix-branch -f```

@@ -217,7 +217,7 @@ class Thread extends Application
 			"thread_id"     => Http::Request("id", true),
 			"post_date"     => time(),
 			"ip_address"    => $_SERVER['REMOTE_ADDR'],
-			"post"          => str_replace("'", "&apos;", $_POST['post']),
+			"post"          => str_replace("'", "&apos;", htmlspecialchars($_POST['post'])),
 			"quote_post_id" => (Http::Request("quote_post_id", true)) ? Http::Request("quote_post_id", true) : 0,
 			"best_answer"   => 0,
 			"first_post"    => 0
@@ -351,7 +351,7 @@ class Thread extends Application
 			"with_best_answer"     => 0,
 			"poll_question"       => Http::Request("poll_question"),
 			"poll_data"           => $poll_data,
-			"poll_allow_multiple" => (isset($_POST['poll_allow_multiple'])) ? 1 : 0
+			"poll_allow_multiple" => (isset(htmlspecialchars($_POST['poll_allow_multiple']))) ? 1 : 0
 		);
 		$this->Db->Insert("c_threads", $thread);
 
@@ -361,7 +361,7 @@ class Thread extends Application
 			"thread_id"   => $this->Db->GetLastID(),
 			"post_date"   => $thread['last_post_date'],
 			"ip_address"  => $_SERVER['REMOTE_ADDR'],
-			"post"        => str_replace("'", "&apos;", $_POST['post']),
+			"post"        => str_replace("'", "&apos;", htmlspecialchars($_POST['post'])),
 			"best_answer" => 0,
 			"first_post"  => 1
 		);
@@ -416,7 +416,7 @@ class Thread extends Application
 		}
 
 		$post = array(
-			"post"        => $_REQUEST['post'],
+			"post"        => htmlspecialchars($_REQUEST['post']),
 			"edit_time"   => time(),
 			"edit_author" => $this->Session->member_info['m_id']
 		);
