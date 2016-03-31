@@ -190,6 +190,12 @@ HTML;
 			// Connect to database and get information
 			$installer = new Installer();
 
+			// Check for empty data ex : accessing direct url index.php?step=3
+
+			if( empty($_REQUEST['host']) || empty($_REQUEST['database']) || empty($_REQUEST['username']) || empty($_REQUEST['password']) || empty($_REQUEST['password']) )
+					header("Location: index.php?step=2");
+
+
 			$_SESSION['db_server']   = $installer->input['db_server']   = $_REQUEST['host'];
 			$_SESSION['db_database'] = $installer->input['db_database'] = $_REQUEST['database'];
 			$_SESSION['db_username'] = $installer->input['db_username'] = $_REQUEST['username'];
