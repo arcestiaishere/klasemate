@@ -333,6 +333,10 @@ class Thread extends Application
 			$lock_time = 0;
 		}
 
+		// Parsing HTML XSS here!
+		// Don't use htmlspecialchars in isset
+		$post_allow_multiple = htmlspecialchars($_POST['poll_allow_multiple']);
+
 		// Insert new thread item
 		$thread = array(
 			"title"               => Http::Request("title"),
@@ -351,7 +355,7 @@ class Thread extends Application
 			"with_best_answer"     => 0,
 			"poll_question"       => Http::Request("poll_question"),
 			"poll_data"           => $poll_data,
-			"poll_allow_multiple" => (isset(htmlspecialchars($_POST['poll_allow_multiple']))) ? 1 : 0
+			"poll_allow_multiple" => (isset($post_allow_multiple)) ? 1 : 0
 		);
 		$this->Db->Insert("c_threads", $thread);
 
