@@ -482,17 +482,69 @@ switch($do) {
 
 		break;
 
-	case "delete_member":
+	case "add_member":
 
+	// Get security hash key
+	$Db->Query("SELECT * FROM c_config c WHERE field = 'security_salt_hash' OR field = 'security_salt_key';");
+	$_salt = $Db->FetchToArray();
+
+	$salt = array(
+		"hash" => $_salt[0]['value'],
+		"key"  => $_salt[1]['value']
+	);
+
+	$members = array(
+		"username"    	=> Http::Request("username"),
+		"password" 			=> Text::Encrypt(Http::Request("password"), $salt),
+		"email" 				=> Http::Request("email"),
+		"usergroup" 		=> Http::Request("usergroup"),
+		"hide_email"    => 1,
+		"ip_address"    => $_SERVER['REMOTE_ADDR'],
+		"joined"        => time(),
+		"photo_type"    => "gravatar",
+		"posts"         => 0,
+		"template"      => $Admin->SelectConfig("template_default_set"),
+		"theme"         => $Admin->SelectConfig("theme_default_set"),
+		"language"      => $Admin->SelectConfig("language_default_set"),
+		"time_offset"   => $Admin->SelectConfig("date_default_offset"),
+		"dst"           => 0,
+		"show_birthday" => 1,
+		"show_gender"   => 1,
+		"token"         => md5(microtime())
+	);
+
+	$Db->Insert("c_members", $members);
+	$Admin->RegisterLog("Created new members: " . $members['username']);
+
+	header("Location: main.php?act=members&p=manage");
+	exit;
+
+	break;
+
+	case "delete_member":
 		$id = Http::Request("id", true);
-		$Db->Update("c_members", array(
-			"email"        => "",
-			"password"     => "",
-			"usergroup"    => 0,
-			"token"        => ""
-		), "m_id = {$id}");
+
+		// Need to check if target user is admin or not
+		// Administrator can't be deleted
+		// Need to validate from process.php?do=delete_member&id=<random_id>
+
+		$Db->Query("SELECT usergroup FROM c_members WHERE m_id = {$id};");
+		$members = $Db->Fetch();
+
+		if($members['usergroup'] == 1)
+			header("Location: main.php?act=members&p=manage");
+		else{
+
+			$Db->Update("c_members", array(
+				"email"        => "",
+				"password"     => "",
+				"usergroup"    => 0,
+				"token"        => ""
+			), "m_id = {$id}");
 
 		header("Location: main.php?act=members&p=manage");
+
+		}
 		exit;
 
 		break;
