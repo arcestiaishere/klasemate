@@ -30,7 +30,7 @@
 	<div id="content">
 		<div class="grid-row">
 			<!-- LEFT -->
-			<form action="process.php?do=save" method="post">
+			<form action="process.php?do=add_member" method="post">
 				<table class="table-list">
 					<tr>
 						<th colspan="2">New Member Information</th>
@@ -41,7 +41,7 @@
 					</tr>
 					<tr>
 						<td class="title-fixed">Password</td>
-						<td><input type="text" name="password" class="small"></td>
+						<td><input type="password" name="password" class="small"></td>
 					</tr>
 					<tr>
 						<td class="title-fixed">E-mail Address</td>
@@ -50,7 +50,7 @@
 					<tr>
 						<td class="title-fixed">User Group</td>
 						<td>
-							<select>
+							<select name="usergroup">
 								<?php echo $list ?>
 							</select>
 						</td>
