@@ -1,5 +1,5 @@
 <div class="title-bar">
-	<div class="title fleft"><span><?php __($community_name) ?></span><?php __( (substr( $message['subject'], 0, 3 ) === "Re:") ? $message['subject'] : "Re:". $message['subject'] ) ?>;@<?php __($message['username']) ?>;</div>
+	<div class="title fleft"><span><?php __($community_name) ?></span>Re:<?php __($message['subject']) ?>;@<?php __($message['username']) ?>;</div>
 	<?php if(Http::Request("is") != "sent"): ?>
 	<?php endif; ?>
 </div>
