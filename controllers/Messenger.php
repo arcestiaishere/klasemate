@@ -208,6 +208,32 @@ class Messenger extends Application
 
 	/**
 	 * --------------------------------------------------------------------
+	 * SEND REPLY PERSONAL MESSAGE
+	 * --------------------------------------------------------------------
+	 */
+	public function SendReply()
+	{
+		$this->layout = false;
+
+		// Build register
+		$pm = array(
+			"from_id"   => $this->member_id,
+			"to_id"     => Http::Request("to", true),
+			"subject"   => "Re:".Http::Request("subject"),
+			"status"    => 1,
+			"sent_date" => time(),
+			"message"   => $_REQUEST['post']
+		);
+
+		// Send message
+		$this->Db->Insert("c_messages", $pm);
+
+		// Redirect
+		$this->Core->Redirect("messenger?m=1");
+	}
+
+	/**
+	 * --------------------------------------------------------------------
 	 * DELETE PERSONAL MESSAGES
 	 * --------------------------------------------------------------------
 	 */
@@ -232,4 +258,38 @@ class Messenger extends Application
 		// Redirect
 		$this->Core->Redirect("messenger");
 	}
+
+	/**
+	 * --------------------------------------------------------------------
+	 * VIEW: REPLY MESSAGE
+	 * --------------------------------------------------------------------
+	 */
+	public function Reply($id)
+	{
+		// Get message info and post
+		$this->Db->Query("SELECT p.*, m.username, m.signature, m.member_title, m.email, m.photo, m.photo_type
+				FROM c_messages p LEFT JOIN c_members m ON (p.from_id = m.m_id)
+				WHERE pm_id = {$id} AND (to_id = {$this->member_id} OR from_id = {$this->member_id});");
+
+		if($this->Db->Rows() == 1) {
+			$message = $this->Db->Fetch();
+
+			// Format content
+			$message['sent_date'] = $this->Core->DateFormat($message['sent_date']);
+			$message['avatar'] = $this->Core->GetAvatar($message, 96);
+		}
+		else {
+			$this->Core->Redirect("messenger?m=2");
+		}
+
+		// Page info
+		$page_info['title'] = i18n::Translate("M_TITLE");
+		$page_info['bc'] = array(i18n::Translate("M_TITLE"), $message['subject']);
+		$this->Set("page_info", $page_info);
+
+		// Return variables
+		$this->Set("message", $message);
+		$this->Set("enable_signature", $this->Core->config['general_member_enable_signature']);
+	}
+
 }
