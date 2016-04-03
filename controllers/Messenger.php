@@ -247,7 +247,7 @@ class Messenger extends Application
 		$pm = array(
 			"from_id"   => $this->member_id,
 			"to_id"     => Http::Request("to", true),
-			"subject"   => (substr( $subject, 0, 3 ) === "Fwd:") ? $subject : "Fwd:". $subject ,
+			"subject"   => (substr( $subject, 0, 4 ) === "Fwd:") ? $subject : "Fwd:". $subject ,
 			"status"    => 1,
 			"sent_date" => time(),
 			"message"   => $_REQUEST['post']
