@@ -945,6 +945,8 @@ class Thread extends Application
 			$first_post_info['edited'] = "";
 		}
 
+		$first_post_info['post'] = htmlentities($first_post_info['post']);
+		
 		// Block bad words
 		$first_post_info['post'] = $this->_FilterBadWords($first_post_info['post']);
 
