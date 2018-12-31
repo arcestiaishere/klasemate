@@ -3,6 +3,8 @@ Klasemate
 
 ![Latest release](https://img.shields.io/github/release/arcestiaishere/klasemate.svg)
 
+## Klasemate now fully unsupported, repo will be read-only
+
 Free open-source discussion board (forum) software, written in object-oriented PHP. Huge advancements were made in our Beta releases and we're working hard to bring new exciting features and important improvements! Read our [Contribution Guidelines](https://github.com/arcestiaishere/klasemate/blob/master/CONTRIBUTE.md) and be part of it.
 
 ## Highlight features##
